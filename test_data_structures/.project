@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>lib_data_structures</name>
+	<name>test_data_structures</name>
 	<comment></comment>
 	<projects>
+		<project>data_structures</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

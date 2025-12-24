@@ -1,9 +1,12 @@
 /*
  * dbl_linked_list.c
  *
- *  Created on: Dec 23, 2025
+ *  Created on: Dec 24, 2025
  *  Author: mark2v
  */
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -209,4 +212,5 @@ void free_list(dbl_ll_node *list) {
 		node = next;
 	}
 }
+
 
