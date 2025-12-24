@@ -9,11 +9,11 @@
 #define INCLUDE_DBL_LINKED_LIST_H_
 
 
-typedef struct node {
+typedef struct dll_node {
 
 	void *data;
-	struct node *previous;
-	struct node *next;
+	struct dll_node *previous;
+	struct dll_node *next;
 
 } dbl_ll_node;
 

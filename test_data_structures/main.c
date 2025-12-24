@@ -6,14 +6,14 @@
  */
 #include <stdio.h>
 
-//#include "dbl_linked_list.h"
 #include "include/test_dbl_linked_list.h"
+#include "include/test_stack.h"
 
 int main() {
 
-	printf("***** Testing Data Structures *****\n");
+//	test_dbl_linked_list();
 
-	test_dbl_linked_list();
+	test_stack();
 
 	return 0;
 }

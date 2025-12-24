@@ -38,11 +38,14 @@ void test_dbl_linked_list() {
 	printf("*****  test_dbl_linked_list  *****\n");
 
 	dbl_ll_node *head = create_list();
-	if (head == NULL) {
+	if (!head) {
 		return;
 	}
 
 	char* head_name = (char*)malloc(sizeof(char) * (MAX_CHAR + 1));
+	if (!head_name) {
+		return;
+	}
 	snprintf(head_name, MAX_CHAR, "Head");
 
 	add_data(head, 0, head_name);
@@ -54,7 +57,7 @@ void test_dbl_linked_list() {
 	int len = 3;
 	for (int i = 0; i < len; i++) {
 		dbl_ll_node *next = add_node(head);
-		if (next == NULL) {
+		if (!next) {
 			return;
 		}
 
@@ -70,6 +73,10 @@ void test_dbl_linked_list() {
 
 	// Insert a node before the head.
 	dbl_ll_node *new_head = insert_before(head);
+	if (!new_head) {
+		return;
+	}
+
 	add_data(new_head, 100, NULL);
 
 	head = new_head;
@@ -77,12 +84,20 @@ void test_dbl_linked_list() {
 	print_list(head);
 
 	dbl_ll_node *node_after_head = insert_after(head);
+	if (!node_after_head) {
+		return;
+	}
+
 	add_data(node_after_head, 101, NULL);
 
 	print_list(head);
 
 	// Add a node to the end of the list.
 	dbl_ll_node *new_last_node = insert_after(last_node);
+	if (!new_last_node) {
+		return;
+	}
+
 	add_data(new_last_node, 102, NULL);
 
 	print_list(head);
@@ -145,6 +160,11 @@ void cleanup(dbl_ll_node *node) {
 
 void add_data(dbl_ll_node *node, int id, char* name) {
 	ll_data *data = (ll_data*)malloc(sizeof(ll_data));
+	if (!data) {
+		fprintf(stderr, "Unable to allocate ll_data!\n");
+		return;
+	}
+
 	(*data).id = id;
 
 	if (name) {
@@ -152,6 +172,11 @@ void add_data(dbl_ll_node *node, int id, char* name) {
 	}
 	else {
 		(*data).name = (char*)malloc(sizeof(char) * (MAX_CHAR + 1));
+		if (!(*data).name) {
+			fprintf(stderr, "Unable to allocate name!\n");
+			return;
+		}
+
 		snprintf(data->name, MAX_CHAR, "Node #%d", id);
 	}
 

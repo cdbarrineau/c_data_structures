@@ -46,7 +46,7 @@ dbl_ll_node* create_list() {
 
 	dbl_ll_node *head = (dbl_ll_node*)malloc(sizeof(dbl_ll_node));
 	if (head == NULL) {
-		fprintf(stderr, "Unable to allocate linked list!");
+		fprintf(stderr, "Unable to allocate linked list!\n");
 		return NULL;
 	}
 
@@ -68,7 +68,7 @@ dbl_ll_node* create_list() {
 dbl_ll_node* add_node(dbl_ll_node *node) {
 	dbl_ll_node *new_node = (dbl_ll_node*)malloc(sizeof(dbl_ll_node));
 	if (new_node == NULL) {
-		fprintf(stderr, "Unable to allocation linked list node!");
+		fprintf(stderr, "Unable to allocation linked list node!\n");
 		return NULL;
 	}
 
@@ -131,7 +131,7 @@ dbl_ll_node* insert_before(dbl_ll_node* node) {
 	// Create a new node.
 	dbl_ll_node *new_node = (dbl_ll_node*)malloc(sizeof(dbl_ll_node));
 	if (new_node == NULL) {
-		fprintf(stderr, "Unable to allocate node!");
+		fprintf(stderr, "Unable to allocate node!\n");
 		return NULL;
 	}
 
@@ -168,7 +168,7 @@ dbl_ll_node* insert_after(dbl_ll_node *node) {
 
 	dbl_ll_node *new_node = (dbl_ll_node*)malloc(sizeof(dbl_ll_node));
 	if (new_node == NULL) {
-		fprintf(stderr, "Unable to allocate node!");
+		fprintf(stderr, "Unable to allocate node!\n");
 		return NULL;
 	}
 
