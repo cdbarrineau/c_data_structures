@@ -10,7 +10,9 @@
 
 #define MAX_SIZE 100
 
-typedef struct stack_t {
+// Don't need a tag on the struct here because
+// we're not referring to itself inside the struct.
+typedef struct {
 
 	// The top of the stack.  Which is really just
 	// the index into the items array.

@@ -35,15 +35,19 @@ void test_stack() {
 		push(s1, buf);
 	}
 
-	char* peeked = (char*)peek(s1);
-	printf("Peeked item: %s\n", peeked);
+	int s1_empty = is_empty(s1);
+	int s2_empty = is_empty(s2);
 
-	printf("s1 is empty: %d\n", is_empty(s1));
-	printf("s2 is empty: %d\n", is_empty(s2));
+	printf("s1 is %s\n", s1_empty ? "empty" : "not empty");
+	printf("s2 is %s\n", s2_empty ? "empty" : "not empty");
+
+	char* peeked = (char*)peek(s1);
+	printf("Peeked item in s1: %s\n\n", peeked);
+
 
 	char* item = (char*)pop(s1);
 	while (item) {
-		printf("Popped item %s\n", item);
+		printf("Popped item in s1: %s\n", item);
 
 		free(item);
 

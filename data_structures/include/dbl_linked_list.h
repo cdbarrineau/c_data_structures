@@ -8,7 +8,10 @@
 #ifndef INCLUDE_DBL_LINKED_LIST_H_
 #define INCLUDE_DBL_LINKED_LIST_H_
 
-
+// Need a tag on this struct because we're referring
+// to the struct itself inside the struct.
+// However, note that nowhere else do we refer to this
+// dll_node tag.  Only refer to the alias dbl_ll_node.
 typedef struct dll_node {
 
 	void *data;
