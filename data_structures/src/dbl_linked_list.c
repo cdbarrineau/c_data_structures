@@ -213,4 +213,3 @@ void free_list(dbl_ll_node *list) {
 	}
 }
 
-

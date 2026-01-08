@@ -8,6 +8,8 @@
 #ifndef INCLUDE_DBL_LINKED_LIST_H_
 #define INCLUDE_DBL_LINKED_LIST_H_
 
+// DEPRECATED linked list.
+
 // Need a tag on this struct because we're referring
 // to the struct itself inside the struct.
 // However, note that nowhere else do we refer to this
