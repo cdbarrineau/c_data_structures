@@ -22,10 +22,10 @@ typedef struct ll_data_type {
 
 
 // Forward declination.
-void print_list(dbl_ll_node *node);
-void cleanup(dbl_ll_node *node);
-void add_data(dbl_ll_node *node, int id, char* name);
-void free_data(ll_data *data);
+static void print_list(dbl_ll_node *node);
+static void cleanup(dbl_ll_node *node);
+static void add_data(dbl_ll_node *node, int id, char* name);
+static void free_data(ll_data *data);
 
 /***********************************************************************
  * NAME:		test_dbl_linked_list()
@@ -123,7 +123,7 @@ void test_dbl_linked_list() {
 }
 
 
-void print_list(dbl_ll_node *node) {
+static void print_list(dbl_ll_node *node) {
 
 	if (node == NULL) {
 		printf("No node to print!\n");
@@ -141,13 +141,13 @@ void print_list(dbl_ll_node *node) {
 	}
 }
 
-void free_data(ll_data *data) {
+static void free_data(ll_data *data) {
 	free((*data).name);
 
 	free(data);
 }
 
-void cleanup(dbl_ll_node *node) {
+static void cleanup(dbl_ll_node *node) {
 
 	while (node) {
 		ll_data *data = (*node).data;
@@ -158,7 +158,7 @@ void cleanup(dbl_ll_node *node) {
 	}
 }
 
-void add_data(dbl_ll_node *node, int id, char* name) {
+static void add_data(dbl_ll_node *node, int id, char* name) {
 	ll_data *data = (ll_data*)malloc(sizeof(ll_data));
 	if (!data) {
 		fprintf(stderr, "Unable to allocate ll_data!\n");

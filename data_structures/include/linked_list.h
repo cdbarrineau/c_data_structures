@@ -141,27 +141,43 @@ linked_list_node_t* push_end(linked_list_t *list, void *data);
 void* remove_end(linked_list_t *list);
 
 /***********************************************************************
- * NAME:		add_at_index(linked_list_t*, void*, int)
+ * NAME:		insert_at_index(linked_list_t*, void*, int)
  *
- * DESCRIPTION:	Adds a new node at the specified index the linked list.
+ * DESCRIPTION:	Inserts a new node at the specified index the linked list.
  *
- * PARAMETERS:	list The linked list to add the node to.
+ * PARAMETERS:	list The linked list to insert the node to.
  * 				data The data to set on the node.
- * 				index The zero-based index to insert the node into.
+ * 				index The zero-based index to insert the node into.  Only
+ * 				caveat is that if the index is equal to the current size,
+ * 				the node will be inserted at the end.
  *
  * RETURNS:		Returns the created node or NULL if the index is out
  * 				of bounds or memory could not be allocated for the node.
  */
-linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index);
+linked_list_node_t* insert_at_index(linked_list_t *list, void *data, int index);
 
-//void* remove_at_index(linked_list_t *list, int index);
+/***********************************************************************
+ * NAME:		remove_at_index(linked_list_t*, int)
+ *
+ * DESCRIPTION:	Removes the node at the specified 0-based index.
+ *
+ * PARAMETERS:	list The linked list to remove the node from.
+ * 				index The index to remove the node.
+ *
+ * RETURNS:		Returns the end node's data or NULL if the list is empty
+ * 				or the index is out of bounds.
+ */
+void* remove_at_index(linked_list_t *list, int index);
 
-
-
-
-
-
-
+/***********************************************************************
+ * NAME:		clear_linked_list(linked_list_t*)
+ *
+ * DESCRIPTION:	Removes all nodes in the linked list.
+ *
+ * PARAMETERS:	list The linked list to clear all nodes.
+ *
+ */
+void clear_linked_list(linked_list_t *list);
 
 /***********************************************************************
  * NAME:		find_node_by_data(linked_list_t*, void*)
@@ -174,72 +190,6 @@ linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index);
  * RETURNS:		Returns the node with the data or NULL if not found.
  */
 linked_list_node_t* find_node_by_data(linked_list_t *list, void *data);
-
-
-
-
-
-
-///***********************************************************************
-// * NAME:		insert_node_before(linked_list_t*, linked_list_node_t*, void*)
-// *
-// * DESCRIPTION:	Inserts a new node before the specified node.
-// *
-// * PARAMETERS:	list The linked list to insert the node into.
-// * 				node The node to insert before.
-// * 				data The data to set on the node.
-// *
-// * RETURNS:		Returns the created node or NULL if the passed in node
-// * 				is not found in the list.
-// */
-//linked_list_node_t* insert_node_before(
-//		linked_list_t *list,
-//		linked_list_node_t *node,
-//		void *data);
-
-
-/***********************************************************************
- * NAME:		add_node(dbl_ll_node*)
- *
- * DESCRIPTION:	Adds a new node to the end of the linked list.
- *
- * PARAMETERS:	ll The lined list to add the node to.
- *
- * RETURNS:		Returns the created node.
- */
-//linked_list_node_t* add_node(linked_list_node_t *ll);
-//
-///***********************************************************************
-// * NAME:		remove_node(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Removes the specified node, adjusting the previous and next.
-// *
-// * PARAMETERS:	node The node to remove.
-// *
-// */
-//void remove_node(linked_list_node_t *node);
-//
-///***********************************************************************
-// * NAME:		insert_before(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Inserts a node before the specified node.
-// *
-// * PARAMETERS:	node The node to insert before.
-// *
-// * RETURNS:		Returns the inserted node.
-// */
-//linked_list_node_t* insert_before(linked_list_node_t *node);
-//
-///***********************************************************************
-// * NAME:		insert_after(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Inserts a node after the specified node.
-// *
-// * PARAMETERS:	node The node to insert after.
-// *
-// * RETURNS:		Returns the inserted node.
-// */
-//linked_list_node_t* insert_after(linked_list_node_t *node);
 
 
 #endif /* INCLUDE_LINKED_LIST_H_ */

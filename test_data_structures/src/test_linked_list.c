@@ -15,10 +15,12 @@ static void print_list(linked_list_t *list);
 static void test_push_head(linked_list_t *list);
 static void test_push_end(linked_list_t *list);
 static void test_find_by_data(linked_list_t *list);
-
+static void test_insert_at_index(linked_list_t *list);
+static void test_remove_at_index(linked_list_t *list);
+static void test_clear_list();
 
 /***********************************************************************
- * NAME:		test_dbl_linked_list()
+ * NAME:		test_linked_list()
  *
  * DESCRIPTION:	Tests a doubly linked list.
  *
@@ -26,6 +28,8 @@ static void test_find_by_data(linked_list_t *list);
 void test_linked_list() {
 
 	printf("*****  test_linked_list  *****\n");
+
+	test_clear_list();
 
 	linked_list_t *list = create_linked_list();
 	if (list == NULL) {
@@ -35,6 +39,8 @@ void test_linked_list() {
 	test_push_head(list);
 	test_push_end(list);
 	test_find_by_data(list);
+	test_insert_at_index(list);
+	test_remove_at_index(list);
 
 	free_linked_list(list);
 }
@@ -134,6 +140,98 @@ static void test_find_by_data(linked_list_t *list) {
 	else {
 		fprintf(stderr, "Found node by data: Twelve!\n");
 	}
+}
+
+static void test_insert_at_index(linked_list_t *list) {
+
+	printf("\n* Clearing linked list to insert at index. *\n");
+	print_list(list);
+
+	// Make sure the list is cleared.
+	clear_linked_list(list);
+
+	print_list(list);
+
+	// Push head and end.
+	push_head(list, "One");
+	push_end(list, "Three");
+
+	insert_at_index(list, "Two", 1);
+
+	print_list(list);
+
+	// Insert a head.
+	insert_at_index(list, "Zero", 0);
+
+	print_list(list);
+
+	// Insert at end.
+	insert_at_index(list, "End", (*list).size);
+
+	print_list(list);
+}
+
+static void test_remove_at_index(linked_list_t *list) {
+	printf("\n* Clearing linked list to remove at index. *\n");
+	print_list(list);
+
+	// Make sure the list is cleared.
+	clear_linked_list(list);
+
+	print_list(list);
+
+	// Push three items.
+	printf("Pushing five nodes.\n");
+	push_head(list, "Ten");
+	push_head(list, "Eleven");
+	push_head(list, "Twelve");
+	push_head(list, "Thirteen");
+	push_head(list, "Fourteen");
+
+	print_list(list);
+
+	// Remove head.
+	char * data = remove_at_index(list, 0);
+	printf("Removed data at index %d: %s\n", 0, data);
+
+	print_list(list);
+
+	// Remove end.
+	int end_index = (*list).size - 1;
+	data = remove_at_index(list, end_index);
+	printf("Removed data at index %d: %s\n", end_index, data);
+
+	print_list(list);
+
+	// Remove the one in the middle, index 1.
+	data = remove_at_index(list, 1);
+	printf("Removed data at index %d: %s\n", 1, data);
+
+	print_list(list);
+
+	data = remove_at_index(list, -1);
+	printf("Removed data at index %d: %s\n", -1, data);
+
+	print_list(list);
+
+	data = remove_at_index(list, 10);
+	printf("Removed data at index %d: %s\n", 10, data);
+
+	print_list(list);
+}
+
+static void test_clear_list() {
+	linked_list_t *list = create_linked_list();
+	push_head(list, "One");
+	push_head(list, "Two");
+
+	print_list(list);
+
+	clear_linked_list(list);
+
+	print_list(list);
+
+	free_linked_list(list);
 }
 
 static void print_list(linked_list_t *list) {

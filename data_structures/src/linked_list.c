@@ -12,6 +12,9 @@
 
 #include "../include/linked_list.h"
 
+// Forward declarations.
+//static linked_list_node_t* malloc_node(void *data);
+//static void* free_node(linked_list_node_t *node);
 
 /***********************************************************************
  * NAME:		create_linked_list()
@@ -133,6 +136,7 @@ linked_list_node_t* push_head(linked_list_t *list, void *data) {
 void* remove_head(linked_list_t *list) {
 
 	if ((*list).head == NULL) {
+		fprintf(stderr, "Can not remove HEAD of linked list from empty list.\n");
 		return NULL;
 	}
 
@@ -215,6 +219,7 @@ linked_list_node_t* push_end(linked_list_t *list, void *data) {
 void* remove_end(linked_list_t *list) {
 
 	if ((*list).end == NULL) {
+		fprintf(stderr, "Can not remove END of linked list from empty list.\n");
 		return NULL;
 	}
 
@@ -247,18 +252,20 @@ void* remove_end(linked_list_t *list) {
 }
 
 /***********************************************************************
- * NAME:		add_at_index(linked_list_t*, void*, int)
+ * NAME:		insert_at_index(linked_list_t*, void*, int)
  *
- * DESCRIPTION:	Adds a new node at the specified index the linked list.
+ * DESCRIPTION:	Inserts a new node at the specified index the linked list.
  *
- * PARAMETERS:	list The linked list to add the node to.
+ * PARAMETERS:	list The linked list to insert the node to.
  * 				data The data to set on the node.
- * 				index The zero-based index to insert the node into.
+ * 				index The zero-based index to insert the node into.  Only
+ * 				caveat is that if the index is equal to the current size,
+ * 				the node will be inserted at the end.
  *
  * RETURNS:		Returns the created node or NULL if the index is out
  * 				of bounds or memory could not be allocated for the node.
  */
-linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index) {
+linked_list_node_t* insert_at_index(linked_list_t *list, void *data, int index) {
 
 	if (index == 0) {
 		return push_head(list, data);
@@ -266,7 +273,12 @@ linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index) {
 	else if ((*list).size == index) {
 		return push_end(list, data);
 	}
+	else if (index < 0) {
+		fprintf(stderr, "Invalid index to insert in linked list %d\n", index);
+		return NULL;
+	}
 	else if (((*list).size - 1) < index) {
+		fprintf(stderr, "Invalid index to insert in linked list %d\n", index);
 		return NULL;
 	}
 
@@ -281,26 +293,23 @@ linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index) {
 	(*node).next = NULL;
 	(*node).previous = NULL;
 
-
-
 	// Look for the insertion point.
 	int i = 0;
 
+	linked_list_node_t *previous = NULL;
 	linked_list_node_t *curr = (*list).head;
 	while (curr != NULL) {
 		if (i == index) {
-			(*node).previous = curr;
+			(*previous).next = node;
+			(*node).next = curr;
+			(*curr).previous = node;
 
-			if ((*curr).previous != NULL) {
-//				(*curr).next = node;
-			}
-
-
-			(*curr).next = node;
-
+			(*list).size++;
 
 			return node;
 		}
+
+		previous = curr;
 
 		i++;
 		curr = (*curr).next;
@@ -309,10 +318,78 @@ linked_list_node_t* add_at_index(linked_list_t *list, void *data, int index) {
 	return NULL;
 }
 
+/***********************************************************************
+ * NAME:		remove_at_index(linked_list_t*, int)
+ *
+ * DESCRIPTION:	Removes the node at the specified 0-based index.
+ *
+ * PARAMETERS:	list The linked list to remove the node from.
+ * 				index The index to remove the node.
+ *
+ * RETURNS:		Returns the end node's data or NULL if the list is empty
+ * 				or the index is out of bounds.
+ */
+void* remove_at_index(linked_list_t *list, int index) {
 
+	if (index == 0) {
+		return remove_head(list);
+	}
+	else if (index == (*list).size - 1) {
+		return remove_end(list);
+	}
+	else if (index < 0) {
+		fprintf(stderr, "Invalid index to remove in linked list %d\n", index);
+		return NULL;
+	}
+	else if (index >= ((*list).size)) {
+		fprintf(stderr, "Invalid index to remove in linked list %d\n", index);
+		return NULL;
+	}
 
+	int i = 0;
+	linked_list_node_t *previous = NULL;
+	linked_list_node_t *node = (*list).head;
+	while (node != NULL) {
+		if (i == index) {
+			void *data = (*node).data;
 
+			// Previous should never be null as we took care of
+			// the head at the start of this function.
+			(*previous).next = (*node).next;
+			(*node).next->previous = previous;
 
+			free(node);
+
+			(*list).size--;
+
+			return data;
+		}
+
+		previous = node;
+		i++;
+		node = (*node).next;
+	}
+
+	return NULL;
+}
+
+/***********************************************************************
+ * NAME:		clear_linked_list(linked_list_t*)
+ *
+ * DESCRIPTION:	Removes all nodes in the linked list.
+ *
+ * PARAMETERS:	list The linked list to clear all nodes.
+ *
+ */
+void clear_linked_list(linked_list_t *list) {
+
+	linked_list_node_t *node = (*list).head;
+	while (node != NULL) {
+		remove_end(list);
+
+		node = (*list).head;
+	}
+}
 
 /***********************************************************************
  * NAME:		find_node_by_data(linked_list_t*, void*)
@@ -339,160 +416,33 @@ linked_list_node_t* find_node_by_data(linked_list_t *list, void *data) {
 }
 
 
-
-
-//
-///***********************************************************************
-// * NAME:		find_head()
-// *
-// * DESCRIPTION:	Finds and returns the head of the list.
-// *
-// * RETURNS:		Returns the head of the list.
-// */
-//linked_list_node_t* find_head(linked_list_node_t *node) {
-//	linked_list_node_t *head = node;
-//
-//	while ((*node).previous) {
-//		if ((*node).previous) {
-//			head = find_head((*node).previous);
-//		}
-//
-//		return head;
-//	}
-//
-//	return head;
-//}
-
-//
-///***********************************************************************
-// * NAME:		add_node(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Adds a new node to the end of the linked list.
-// *
-// * PARAMETERS:	ll The lined list to add the node to.
-// *
-// * RETURNS:		Returns the created node.
-// */
-//linked_list_node_t* add_node(linked_list_node_t *node) {
-//	linked_list_node_t *new_node = (linked_list_node_t*)malloc(sizeof(linked_list_node_t));
-//	if (new_node == NULL) {
-//		fprintf(stderr, "Unable to allocation linked list node!\n");
+//static linked_list_node_t* malloc_node(void *data) {
+//	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
+//	if (node == NULL) {
+//		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
 //		return NULL;
 //	}
 //
-//	// Find the end of the list.
-//	linked_list_node_t *end = node;
-//	while ((*end).next != NULL) {
-//		end = (*end).next;
-//	}
+//	(*node).data = data;
+//	(*node).next = NULL;
+//	(*node).previous = NULL;
 //
-//	(*new_node).previous = end;
-//	(*new_node).next = NULL;
-//
-//	(*end).next = new_node;
-//
-//	return new_node;
+//	return node;
 //}
+
+//static void* free_node(linked_list_node_t *node) {
+//	void *data = (*node).data;
 //
-///***********************************************************************
-// * NAME:		remove_node(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Removes the specified node, adjusting the previous and next.
-// *
-// * PARAMETERS:	node The node to remove.
-// */
-//void remove_node(linked_list_node_t *node) {
-//
-//	// Get the node before and after this node.
-//	linked_list_node_t *previous = NULL;
-//	if ((*node).previous) {
-//		previous = (*node).previous;
-//	}
-//
-//	linked_list_node_t *next = NULL;
-//	if ((*node).next) {
-//		next = (*node).next;
-//	}
-//
-//	if (previous) {
-//		(*previous).next = next;
-//	}
-//
-//	if (next) {
-//		(*next).previous = previous;
-//	}
+//	(*node).data = NULL;
+//	(*node).previous = NULL;
+//	(*node).next = NULL;
 //
 //	free(node);
+//
+//	if ((*list).size > 0) {
+//			(*list).size--;
+//		}
+//
+//	return data;
 //}
-//
-///***********************************************************************
-// * NAME:		insert_before(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Inserts a node before the specified node.
-// *
-// * PARAMETERS:	node The node to insert before.
-// *
-// * RETURNS:		Returns the inserted node.
-// */
-//linked_list_node_t* insert_before(linked_list_node_t* node) {
-//
-//	// Create a new node.
-//	linked_list_node_t *new_node = (linked_list_node_t*)malloc(sizeof(linked_list_node_t));
-//	if (new_node == NULL) {
-//		fprintf(stderr, "Unable to allocate node!\n");
-//		return NULL;
-//	}
-//
-//	// Get any node before and after this one.
-//	linked_list_node_t *previous = (*node).previous;
-//	linked_list_node_t *next = (*node).next;
-//
-//	// Set the links on the nodes.
-//	// Takes care if node is the head.
-//	if (previous) {
-//		(*previous).next = new_node;
-//	}
-//	// Takes care if node is last.
-//	if (next) {
-//		(*next).previous = new_node;
-//	}
-//
-//	(*new_node).previous = previous;
-//	(*new_node).next = node;
-//
-//	return new_node;
-//}
-//
-///***********************************************************************
-// * NAME:		insert_after(dbl_ll_node*)
-// *
-// * DESCRIPTION:	Inserts a node after the specified node.
-// *
-// * PARAMETERS:	node The node to insert after.
-// *
-// * RETURNS:		Returns the inserted node.
-// */
-//linked_list_node_t* insert_after(linked_list_node_t *node) {
-//
-//	linked_list_node_t *new_node = (linked_list_node_t*)malloc(sizeof(linked_list_node_t));
-//	if (new_node == NULL) {
-//		fprintf(stderr, "Unable to allocate node!\n");
-//		return NULL;
-//	}
-//
-//	linked_list_node_t *next = (*node).next;
-//
-//	(*node).next = new_node;
-//
-//	(*new_node).previous = node;
-//	(*new_node).next = next;
-//
-//	if (next) {
-//		(*next).previous = new_node;
-//	}
-//
-//	return new_node;
-//}
-
-
 
