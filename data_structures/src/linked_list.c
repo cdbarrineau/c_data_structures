@@ -13,8 +13,8 @@
 #include "../include/linked_list.h"
 
 // Forward declarations.
-//static linked_list_node_t* malloc_node(void *data);
-//static void* free_node(linked_list_node_t *node);
+static linked_list_node_t* malloc_node(void *data);
+static void* free_node(linked_list_node_t *node);
 
 /***********************************************************************
  * NAME:		create_linked_list()
@@ -55,11 +55,7 @@ void free_linked_list(linked_list_t *list) {
 	while (node != NULL) {
 		linked_list_node_t *next = (*node).next;
 
-		(*node).previous = NULL;
-		(*node).next = NULL;
-		(*node).data = NULL;
-
-		free(node);
+		free_node(node);
 
 		node = next;
 	}
@@ -96,15 +92,10 @@ BOOL is_list_empty(linked_list_t* list) {
  */
 linked_list_node_t* push_head(linked_list_t *list, void *data) {
 
-	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
+	linked_list_node_t *node = malloc_node(data);
 	if (node == NULL) {
-		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
 		return NULL;
 	}
-
-	(*node).data = data;
-	(*node).next = NULL;
-	(*node).previous = NULL;
 
 	// Get the current head and set the new node's next to it.
 	linked_list_node_t *curr_head = (*list).head;
@@ -142,8 +133,6 @@ void* remove_head(linked_list_t *list) {
 
 	linked_list_node_t *head = (*list).head;
 
-	void *data = (*head).data;
-
 	if ((*head).next) {
 		(*list).head = (*head).next;
 		(*list).head->previous = NULL;
@@ -154,17 +143,11 @@ void* remove_head(linked_list_t *list) {
 		(*list).end = NULL;
 	}
 
-	(*head).data = NULL;
-	(*head).previous = NULL;
-	(*head).next = NULL;
-
-	free(head);
-
 	if ((*list).size > 0) {
 		(*list).size--;
 	}
 
-	return data;
+	return free_node(head);
 }
 
 /***********************************************************************
@@ -180,9 +163,8 @@ void* remove_head(linked_list_t *list) {
  */
 linked_list_node_t* push_end(linked_list_t *list, void *data) {
 
-	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
+	linked_list_node_t *node = malloc_node(data);
 	if (node == NULL) {
-		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
 		return NULL;
 	}
 
@@ -225,8 +207,6 @@ void* remove_end(linked_list_t *list) {
 
 	linked_list_node_t *end = (*list).end;
 
-	void *data = (*end).data;
-
 	(*list).end = (*end).previous;
 
 	linked_list_node_t *new_end = (*list).end;
@@ -238,17 +218,11 @@ void* remove_end(linked_list_t *list) {
 		(*list).head = NULL;
 	}
 
-	(*end).previous = NULL;
-	(*end).next = NULL;
-	(*end).data = NULL;
-
-	free(end);
-
 	if ((*list).size > 0) {
 		(*list).size--;
 	}
 
-	return data;
+	return free_node(end);
 }
 
 /***********************************************************************
@@ -283,9 +257,8 @@ linked_list_node_t* insert_at_index(linked_list_t *list, void *data, int index) 
 	}
 
 	// Insert somewhere in the middle.
-	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
+	linked_list_node_t *node = malloc_node(data);
 	if (node == NULL) {
-		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
 		return NULL;
 	}
 
@@ -351,18 +324,14 @@ void* remove_at_index(linked_list_t *list, int index) {
 	linked_list_node_t *node = (*list).head;
 	while (node != NULL) {
 		if (i == index) {
-			void *data = (*node).data;
-
 			// Previous should never be null as we took care of
 			// the head at the start of this function.
 			(*previous).next = (*node).next;
 			(*node).next->previous = previous;
 
-			free(node);
-
 			(*list).size--;
 
-			return data;
+			return free_node(node);
 		}
 
 		previous = node;
@@ -415,34 +384,49 @@ linked_list_node_t* find_node_by_data(linked_list_t *list, void *data) {
 	return NULL;
 }
 
+/***********************************************************************
+ * NAME:		malloc_node(void*)
+ *
+ * DESCRIPTION:	Creates a new node with the data set on it.
+ *
+ * PARAMETERS:	data The data to set on the node.
+ *
+ * RETURNS:		Returns the new node or NULL if memory could not
+ * 				be allocated.  The next and previous nodes will be
+ * 				set to NULL.
+ */
+static linked_list_node_t* malloc_node(void *data) {
+	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
+	if (node == NULL) {
+		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
+		return NULL;
+	}
 
-//static linked_list_node_t* malloc_node(void *data) {
-//	linked_list_node_t *node = malloc(sizeof(linked_list_node_t));
-//	if (node == NULL) {
-//		fprintf(stderr, "Unable to allocate memory for linked list node!\n");
-//		return NULL;
-//	}
-//
-//	(*node).data = data;
-//	(*node).next = NULL;
-//	(*node).previous = NULL;
-//
-//	return node;
-//}
+	(*node).data = data;
+	(*node).next = NULL;
+	(*node).previous = NULL;
 
-//static void* free_node(linked_list_node_t *node) {
-//	void *data = (*node).data;
-//
-//	(*node).data = NULL;
-//	(*node).previous = NULL;
-//	(*node).next = NULL;
-//
-//	free(node);
-//
-//	if ((*list).size > 0) {
-//			(*list).size--;
-//		}
-//
-//	return data;
-//}
+	return node;
+}
+
+/***********************************************************************
+ * NAME:		free_node(linked_list_node_t*)
+ *
+ * DESCRIPTION:	Frees the specified node.
+ *
+ * PARAMETERS:	node The node to free.
+ *
+ * RETURNS:		Returns the data associated with the node.
+ */
+static void* free_node(linked_list_node_t *node) {
+	void *data = (*node).data;
+
+	(*node).data = NULL;
+	(*node).previous = NULL;
+	(*node).next = NULL;
+
+	free(node);
+
+	return data;
+}
 
