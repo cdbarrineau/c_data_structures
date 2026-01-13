@@ -201,7 +201,6 @@ linked_list_node_t* push_end(linked_list_t *list, void *data) {
 void* remove_end(linked_list_t *list) {
 
 	if ((*list).end == NULL) {
-		fprintf(stderr, "Can not remove END of linked list from empty list.\n");
 		return NULL;
 	}
 
@@ -358,6 +357,24 @@ void clear_linked_list(linked_list_t *list) {
 
 		node = (*list).head;
 	}
+}
+
+/***********************************************************************
+ * NAME:		peek_linked_list(linked_list_t*)
+ *
+ * DESCRIPTION:	Gets the head of the list without removing it.
+ *
+ * PARAMETERS: 	list The linked list to peek at the head.
+ *
+ * RETURNS:		Returns the head's data of the list or NULL if there is none.
+ */
+void* peek_linked_list(linked_list_t *list) {
+
+	if ((*list).head != NULL) {
+		return (*list).head->data;
+	}
+
+	return NULL;
 }
 
 /***********************************************************************

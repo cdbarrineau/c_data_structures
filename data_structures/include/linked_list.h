@@ -8,13 +8,7 @@
 #ifndef INCLUDE_LINKED_LIST_H_
 #define INCLUDE_LINKED_LIST_H_
 
-#ifndef BOOL
-
-#define TRUE 1
-#define FALSE 0
-#define BOOL char
-
-#endif
+#include "ds_bool.h"
 
 
 // Need a tag on this struct because we're referring
@@ -180,6 +174,17 @@ void* remove_at_index(linked_list_t *list, int index);
 void clear_linked_list(linked_list_t *list);
 
 /***********************************************************************
+ * NAME:		peek_linked_list(linked_list_t*)
+ *
+ * DESCRIPTION:	Gets the head of the list without removing it.
+ *
+ * PARAMETERS: 	list The linked list to peek at the head.
+ *
+ * RETURNS:		Returns the head's data of the list or NULL if there is none.
+ */
+void* peek_linked_list(linked_list_t *list);
+
+/***********************************************************************
  * NAME:		find_node_by_data(linked_list_t*, void*)
  *
  * DESCRIPTION:	Finds a node by the data.
@@ -190,6 +195,5 @@ void clear_linked_list(linked_list_t *list);
  * RETURNS:		Returns the node with the data or NULL if not found.
  */
 linked_list_node_t* find_node_by_data(linked_list_t *list, void *data);
-
 
 #endif /* INCLUDE_LINKED_LIST_H_ */

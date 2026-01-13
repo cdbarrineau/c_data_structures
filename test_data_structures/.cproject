@@ -34,6 +34,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.393766729" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.link.option.libs.289233892" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="data_structures"/>
+									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.link.option.paths.25552087" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/data_structures/Debug}&quot;"/>
